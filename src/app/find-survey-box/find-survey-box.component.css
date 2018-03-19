@@ -1,0 +1,33 @@
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+  font-size: 100%;
+}
+
+.mat-card{
+  width: 50%;
+  margin: 25px auto auto;
+  /*background-color: rgba(0,0,0,.5);*/
+}
+
+.mat-card-actions{
+  text-align: center;
+}
+
+.mat-card-title{
+  font-weight: bold;
+  color: grey;
+}
+
+.mat-card-header{
+  justify-content: center;
+}
+
+label{
+  color: grey;
+}
