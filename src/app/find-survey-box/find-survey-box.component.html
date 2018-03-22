@@ -3,9 +3,9 @@
     <mat-card-title>FIND A SURVEY</mat-card-title>
   </mat-card-header>
     <label for="SurveyID">survey ID:
-      <input matInput id='SurveyID' placeholder="#ID">
+      <input matInput [(ngModel)]="id" id='SurveyID' placeholder="Enter ID">
     </label>
   <mat-card-actions>
-    <button mat-raised-button color="accent">SUBMIT</button>
+    <a mat-raised-button routerLink="/answer/{{id}}" color="accent">SUBMIT</a>
   </mat-card-actions>
 </mat-card>
