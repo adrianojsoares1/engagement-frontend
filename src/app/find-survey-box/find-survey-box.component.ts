@@ -11,8 +11,7 @@ export class FindSurveyBoxComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   contactServer() {
     console.log(this.id);
