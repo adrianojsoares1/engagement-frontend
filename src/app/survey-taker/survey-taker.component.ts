@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { SurveyService } from '../survey.service';
 import {Survey} from '../Survey';
 
@@ -9,15 +9,20 @@ import {Survey} from '../Survey';
 })
 export class SurveyTakerComponent implements OnInit {
 
+  @Input() team: string;
   survey: Survey;
+  questions: object;
 
-  constructor(private surveyService: SurveyService) { }
+  constructor(private surveyService: SurveyService) {
+    this.questions = [1, 2, 3];
+  }
 
   ngOnInit() {
+    // this.getSurvey();
   }
 
   getSurvey(): void {
-    this.survey = this.surveyService.getSurvey();
+    this.surveyService.getSurvey().subscribe(survey => this.survey = survey);
   }
 
 }

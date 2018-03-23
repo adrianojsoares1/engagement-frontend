@@ -1,3 +1,14 @@
-<p>
-  survey-taker works!
-</p>
+<mat-card class="survey-header">
+  <mat-card-header>Who's Taking this Survey?</mat-card-header>
+  <label for="TeamName">
+    <input matInput [(ngModel)]="team" id="TeamName" placeholder="Team Name">
+  </label>
+</mat-card>
+
+<mat-card class="questions-outer">
+  <mat-card-header class="questions-header">
+    <div mat-card-avatar class="survey-icon"></div>
+    <mat-card-title>Survey #temp</mat-card-title>
+    <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>

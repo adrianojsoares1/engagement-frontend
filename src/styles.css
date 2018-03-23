@@ -4,3 +4,13 @@ body {
   font-family: Roboto, Arial, sans-serif;
   margin: 0;
 }
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+  font-size: 100%;
+}

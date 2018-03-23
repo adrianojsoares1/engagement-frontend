@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class FindSurveyBoxComponent implements OnInit {
 
-  @Input() id: String;
+  @Input() id: string;
 
   constructor() { }
 

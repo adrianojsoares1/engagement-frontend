@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { FindSurveyBoxComponent } from './find-survey-box/find-survey-box.component';
-import { MatButtonModule, MatToolbarModule, MatFormFieldModule, MatSelectModule, MatOptionModule, MatCardModule} from '@angular/material';
+import {
+  MatButtonModule, MatToolbarModule, MatFormFieldModule, MatSelectModule, MatOptionModule, MatCardModule,
+  MatGridListModule
+} from '@angular/material';
 import { AppRoutingModule } from './app-routing.module';
 import { SurveyTakerComponent } from './survey-taker/survey-taker.component';
 import {SurveyService} from './survey.service';
@@ -23,6 +26,7 @@ import {SurveyService} from './survey.service';
     MatFormFieldModule,
     MatSelectModule,
     MatOptionModule,
+    MatGridListModule,
     MatCardModule,
     FormsModule,
     AppRoutingModule
