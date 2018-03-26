@@ -1,14 +1,38 @@
 <mat-card class="survey-header">
+
   <mat-card-header>Who's Taking this Survey?</mat-card-header>
+
   <label for="TeamName">
     <input matInput [(ngModel)]="team" id="TeamName" placeholder="Team Name">
   </label>
+
 </mat-card>
 
 <mat-card class="questions-outer">
+
   <mat-card-header class="questions-header">
     <div mat-card-avatar class="survey-icon"></div>
     <mat-card-title>Survey #temp</mat-card-title>
     <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
   </mat-card-header>
+
+  <mat-card class="question-card" *ngFor="let question of questions ; let i = index" [attr.data-index]="i">
+
+    <mat-card-header class="question-card-header">
+      <div mat-card-avatar class="question-icon"></div>
+      <mat-card-title>{{question.q}}</mat-card-title>
+      <mat-card-subtitle>Question {{i + 1}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <div class="btn-group">
+      <button mat-raised-button
+              *ngFor="let answer of question.answers"
+              [class.selected] = "selectedAnswer === answer"
+              (click) = 'selectAnswer(answer)'>
+        {{answer}}
+      </button>
+    </div>
+
+  </mat-card>
+
 </mat-card>

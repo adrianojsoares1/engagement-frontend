@@ -12,9 +12,30 @@ export class SurveyTakerComponent implements OnInit {
   @Input() team: string;
   survey: Survey;
   questions: object;
+  selectedAnswer: string;
 
   constructor(private surveyService: SurveyService) {
-    this.questions = [1, 2, 3];
+    this.selectedAnswer = "";
+    this.questions = [
+      {q: 'How much Source Code Management (SCM) does your team use?',
+        answers: ['No SCM',
+          'SCM for application code only',
+          '+ Configuration, Configuration Scripts, Infrastructure Code',
+          '+ Test Source Code', '+ Builds and Containers']
+      },
+
+      {q: 'How much Source Code Branching does your team use?',
+        answers: ['No Branching Strategy',
+          'Multiple repositories (copies of source code) used instead of branching', 'Centralized workflow (single pint of entry for all changes)',
+          'Feature branch workflow (dedicated branch for each feature versus using a centralized single location)',
+          'Gitflow workflow (structured branching policy that accounts for features, hotfixes and releases)']
+      }
+    ];
+  }
+
+  selectAnswer(selection): void {
+    this.selectedAnswer = selection;
+    console.log("The selected answer is now " + this.selectedAnswer);
   }
 
   ngOnInit() {

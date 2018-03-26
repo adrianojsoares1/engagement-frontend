@@ -1,18 +1,54 @@
 .mat-card{
-  width: 75%;
+  width: 60%;
   margin: 10px auto auto;
 }
 
-.survey-header{
-  font-weight: bolder;
+.question-card{
+  padding-top: 0;
+  width: 90%;
 }
 
-.mat-card-header{
-  padding-bottom: 5px;
-  padding-top: 5px;
+.question-card-header{
+  padding: 20px 0 0;
+}
+.question-card-header mat-card-title{
+  font-weight: bold;
+  padding-bottom: 0;
+}
+.question-icon{
+  background-size: cover;
+  background-image: url("../../assets/web/question2.png");
+  height: 24px;
+  width: 24px;
+}
+.survey-header{
+  font-weight: bolder;
 }
 
 .survey-icon{
   background-size: cover;
   background-image: url("../../assets/web/ic_assignment_black_24dp_2x.png")
+}
+
+.btn-group button {
+  background-color: #FFF;
+  border: 1px solid deeppink;
+  color: #000;
+  padding: 10px 24px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+}
+
+.btn-group :last-child{
+  margin-bottom: 0;
+}
+
+.btn-group :hover{
+  background-color: #FF4081;
+}
+
+.btn-group .selected {
+  background-color: #FF4081;
 }
