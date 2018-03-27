@@ -16,19 +16,19 @@
     <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
   </mat-card-header>
 
-  <mat-card class="question-card" *ngFor="let question of questions ; let i = index" [attr.data-index]="i">
+  <mat-card class="question-card" *ngFor="let question of survey.groups[0].questions; let i = index" [attr.data-index]="i">
 
     <mat-card-header class="question-card-header">
       <div mat-card-avatar class="question-icon"></div>
-      <mat-card-title>{{question.q}}</mat-card-title>
+      <mat-card-title>{{question.question}}</mat-card-title>
       <mat-card-subtitle>Question {{i + 1}}</mat-card-subtitle>
     </mat-card-header>
 
     <div class="btn-group">
       <button mat-raised-button
-              *ngFor="let answer of question.answers"
-              [class.selected] = "selectedAnswer === answer"
-              (click) = 'selectAnswer(answer)'>
+              *ngFor="let answer of question.responses"
+              [class.selected] = "selectedAnswers[i] == answer"
+              (click) = 'selectAnswer(answer, i)'>
         {{answer}}
       </button>
     </div>

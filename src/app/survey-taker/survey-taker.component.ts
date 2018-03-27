@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { SurveyService } from '../survey.service';
 import {Survey} from '../Survey';
+import { SURVEYS } from '../mock-surveys';
 
 @Component({
   selector: 'app-survey-taker',
@@ -11,31 +12,17 @@ export class SurveyTakerComponent implements OnInit {
 
   @Input() team: string;
   survey: Survey;
-  questions: object;
-  selectedAnswer: string;
+  selectedAnswers: number[];
 
   constructor(private surveyService: SurveyService) {
-    this.selectedAnswer = "";
-    this.questions = [
-      {q: 'How much Source Code Management (SCM) does your team use?',
-        answers: ['No SCM',
-          'SCM for application code only',
-          '+ Configuration, Configuration Scripts, Infrastructure Code',
-          '+ Test Source Code', '+ Builds and Containers']
-      },
+    this.survey = <Survey>SURVEYS[0];
 
-      {q: 'How much Source Code Branching does your team use?',
-        answers: ['No Branching Strategy',
-          'Multiple repositories (copies of source code) used instead of branching', 'Centralized workflow (single pint of entry for all changes)',
-          'Feature branch workflow (dedicated branch for each feature versus using a centralized single location)',
-          'Gitflow workflow (structured branching policy that accounts for features, hotfixes and releases)']
-      }
-    ];
+    this.selectedAnswers = Array(this.survey.groups[0].questions.length);
   }
 
-  selectAnswer(selection): void {
-    this.selectedAnswer = selection;
-    console.log("The selected answer is now " + this.selectedAnswer);
+  selectAnswer(selection, index): void {
+    this.selectedAnswers[index] = selection;
+    console.log("The selected answer at " + index + " is now " + this.selectedAnswers[index]);
   }
 
   ngOnInit() {
@@ -45,5 +32,6 @@ export class SurveyTakerComponent implements OnInit {
   getSurvey(): void {
     this.surveyService.getSurvey().subscribe(survey => this.survey = survey);
   }
+
 
 }
