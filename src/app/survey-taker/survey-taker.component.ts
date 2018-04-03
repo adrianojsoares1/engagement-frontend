@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { SurveyService } from '../survey.service';
-import {Survey} from '../Survey';
+import { Survey } from '../Survey';
 import { SURVEYS } from '../mock-surveys';
+import { SurveyResponse } from '../SurveyResponse';
 
 @Component({
   selector: 'app-survey-taker',
@@ -37,8 +38,25 @@ export class SurveyTakerComponent implements OnInit {
     else console.warn("No more tabs to see in this direction!");
   }
 
+  unansweredQuestions() : boolean {
+    for(let i = 0; i < this.selectedAnswers.length; i++)
+      for(let j = 0; j < this.selectedAnswers[i].length; j++)
+        if (this.selectedAnswers[i][j] == undefined) return true;
+    return false;
+  }
+
   ngOnInit() {
     // this.getSurvey();
+  }
+
+  submitSurvey(): void {
+    let surveyResponse: SurveyResponse = new SurveyResponse();
+
+    surveyResponse.team = this.team;
+    surveyResponse.answers = this.selectedAnswers;
+    surveyResponse.id = 0;
+
+    alert("Here's your answers: " + surveyResponse.answers + " \nFrom Survey #" + surveyResponse.id + " \nBy Team " + surveyResponse.team);
   }
 
   getSurvey(): void {

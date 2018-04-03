@@ -1,8 +1,17 @@
+.questions-outer {
+  width: 70%;
+  margin: 20px auto 0 auto;
+}
+
 .mat-card{
   width: 60%;
   margin: 10px auto auto;
 }
 
+.submit-button{
+  line-height: 36px;
+  margin-bottom: auto;
+}
 .question-card{
   padding-top: 0;
   width: 90%;
@@ -23,6 +32,10 @@
 }
 .survey-header{
   font-weight: bolder;
+  width: 55%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
 }
 
 .survey-icon{
@@ -39,6 +52,7 @@
   cursor: pointer;
   width: 100%;
   display: block;
+  white-space: normal;
 }
 
 .btn-group :last-child{

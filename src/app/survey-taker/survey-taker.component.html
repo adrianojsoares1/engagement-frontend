@@ -1,15 +1,18 @@
-<mat-card class="survey-header">
+<div class="survey-header">
   <mat-card-header>Who's Taking this Survey?</mat-card-header>
   <label for="TeamName">
     <input matInput [(ngModel)]="team" id="TeamName" placeholder="Team Name">
   </label>
-</mat-card>
+</div>
 
-<mat-card class="questions-outer">
+<div class="questions-outer">
   <mat-card-header class="questions-header" >
     <div mat-card-avatar class="survey-icon"></div>
     <mat-card-title>Survey #temp</mat-card-title>
     <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
+    <span style="flex: 1 1 auto;"></span>
+    <button class="submit-button" [disabled]="unansweredQuestions()" title="Fill out the survey to activate button!"
+            (click)="submitSurvey()" mat-raised-button color="accent">Submit</button>
   </mat-card-header>
   <mat-card-content>
     <mat-tab-group [selectedIndex]="selectedTab" #tabs>
@@ -19,7 +22,7 @@
             <mat-card-header class="question-card-header">
               <div mat-card-avatar class="question-icon"></div>
               <mat-card-title>{{question.question}}</mat-card-title>
-              <mat-card-subtitle>Question {{j + 1}}</mat-card-subtitle>
+              <mat-card-subtitle>Question {{j + 1}} of {{group.questions.length}}</mat-card-subtitle>
             </mat-card-header>
             <div class="btn-group">
               <button mat-raised-button
@@ -34,11 +37,8 @@
             <button mat-raised-button color="primary" (click)="selectTab(-1, tabs.selectedIndex)">Prev</button>
             <button mat-raised-button color="primary" (click)="selectTab(1, tabs.selectedIndex)">Next</button>
           </div>
-          <div *ngIf="tabs.selectedIndex == AMOUNT_OF_GROUPS - 1" style="text-align: right">
-            <button mat-raised-button color="accent">SUBMIT</button>
-          </div>
         </div>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
-</mat-card>
+</div>
