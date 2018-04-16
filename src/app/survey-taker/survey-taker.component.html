@@ -1,44 +1,57 @@
-<div class="survey-header">
-  <mat-card-header>Who's Taking this Survey?</mat-card-header>
-  <label for="TeamName">
-    <input matInput [(ngModel)]="team" id="TeamName" placeholder="Team Name">
-  </label>
-</div>
+<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+  <div class="survey-header">
+    <mat-card-header>Who's Taking this Survey?</mat-card-header>
+    <label for="TeamName">
+      <input formControlName="name" id="TeamName" [(ngModel)]="team" placeholder="Team Name">
+    </label>
+  </div>
 
-<div class="questions-outer">
-  <mat-card-header class="questions-header" >
-    <div mat-card-avatar class="survey-icon"></div>
-    <mat-card-title>Survey #temp</mat-card-title>
-    <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
-    <span style="flex: 1 1 auto;"></span>
-    <button class="submit-button" [disabled]="unansweredQuestions()" title="Fill out the survey to activate button!"
-            (click)="submitSurvey()" mat-raised-button color="accent">Submit</button>
-  </mat-card-header>
-  <mat-card-content>
-    <mat-tab-group [selectedIndex]="selectedTab" #tabs>
-      <mat-tab *ngFor="let group of survey.groups; index as i" label="{{group.groupName}}">
-        <div class="tab-content">
-          <mat-card class="question-card" *ngFor="let question of group.questions; index as j">
-            <mat-card-header class="question-card-header">
-              <div mat-card-avatar class="question-icon"></div>
-              <mat-card-title>{{question.question}}</mat-card-title>
-              <mat-card-subtitle>Question {{j + 1}} of {{group.questions.length}}</mat-card-subtitle>
-            </mat-card-header>
-            <div class="btn-group">
-              <button mat-raised-button
-                      *ngFor="let answer of question.responses"
-                      [class.selected] = "selectedAnswers[i][j] == answer"
-                      (click) = 'selectAnswer(answer, i, j)'>
-                {{answer}}
-              </button>
+  <div class="questions-outer">
+    <mat-card-header class="questions-header" >
+      <div mat-card-avatar class="survey-icon"></div>
+      <mat-card-title>Survey #temp</mat-card-title>
+      <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
+      <span style="flex: 1 1 auto;"></span>
+      <button mat-raised-button color="accent" type="submit" class="submit-button"
+              title="Enter your name and answer all the questions!"
+              [disabled]="reactiveForm.invalid">
+        SUBMIT
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <div formArrayName="groups">
+        <mat-tab-group [selectedIndex]="selectedTab" #tabs>
+          <mat-tab *ngFor="let group of survey.groups; index as groupIndex"
+                   label="{{group.groupName}}" [formArrayName]=groupIndex>
+            <div class="tab-content">
+              <mat-card class="question-card" *ngFor="let question of group.questions; index as questionIndex">
+                <mat-card-header class="question-card-header">
+                  <div mat-card-avatar class="question-icon"></div>
+                  <mat-card-title>{{question.question}}</mat-card-title>
+                  <mat-card-subtitle>Question {{questionIndex + 1}} of {{group.questions.length}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-radio-group [formControlName]="questionIndex">
+                  <mat-radio-button *ngFor="let answer of question.responses; index as answerIndex"
+                                    [value]="answerIndex">
+                    <span class="wrap-mat-radio-label">{{answer}}</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-card>
+              <div class="tab-selector-buttons">
+                <button mat-raised-button type="button" color="primary" (click)="selectTab(-1, tabs.selectedIndex)">
+                  Prev
+                </button>
+                <button mat-raised-button type="button" color="primary" (click)="selectTab(1, tabs.selectedIndex)">
+                  Next
+                </button>
+                <button mat-raised-button type="submit" color="accent" class="submit-button" [disabled]="reactiveForm.invalid">
+                  SUBMIT
+                </button>
+              </div>
             </div>
-          </mat-card>
-          <div class="tab-selector-buttons">
-            <button mat-raised-button color="primary" (click)="selectTab(-1, tabs.selectedIndex)">Prev</button>
-            <button mat-raised-button color="primary" (click)="selectTab(1, tabs.selectedIndex)">Next</button>
-          </div>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-card-content>
-</div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </mat-card-content>
+  </div>
+</form>
