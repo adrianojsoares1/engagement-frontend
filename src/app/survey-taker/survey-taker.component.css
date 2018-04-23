@@ -70,7 +70,7 @@
 
 .tab-selector-buttons {
   width: 100%;
-  text-align: center;
+  text-align: left;
   margin-top: 20px;
 }
 
@@ -93,4 +93,9 @@
 
 .wrap-mat-radio-label {
   white-space: normal !important;
+}
+
+input {
+  width: 49%;
+  display: inline-block;
 }
