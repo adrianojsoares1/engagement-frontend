@@ -20,7 +20,7 @@ export class SurveyService {
   constructor(private http: HttpClient) { }
 
   getSurvey(): Observable<Survey> {
-    return this.http.get<Survey>(`${this.hostUrl}/survey/0`)
+    return this.http.get<Survey>(`${this.hostUrl}/api/survey/1`)
       .pipe(catchError(this.handleError<Survey>('getSurvey')));
   }
 
