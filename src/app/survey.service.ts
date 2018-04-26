@@ -25,7 +25,7 @@ export class SurveyService {
   }
 
   postSurvey(survey: SurveyResponse): Observable<SurveyResponse> {
-    return this.http.post<SurveyResponse>(`${this.hostUrl}/api/survey`, survey, this.httpPostOptions)
+    return this.http.post<SurveyResponse>(`${this.hostUrl}/api/survey/2`, survey, this.httpPostOptions)
       .pipe(catchError(this.handleError<SurveyResponse>('postSurvey')));
 
   }
