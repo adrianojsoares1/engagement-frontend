@@ -1,57 +1,103 @@
-<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+<form *ngIf="reactiveForm; else loading" [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+
+  <!-- Ask for ADID and Team Name-->
   <div class="survey-header">
-    <mat-card-header>Who's Taking this Survey?</mat-card-header>
+
+    <mat-card-header style="justify-content: center;">Who's Taking this Survey?</mat-card-header>
+
     <label for="TeamName">
       <input formControlName="name" id="TeamName" [(ngModel)]="team" placeholder="Team Name">
     </label>
+
+    <label for="ADID">
+      <input formControlName="adid" id="ADID" placeholder="ADID">
+    </label>
+
   </div>
 
   <div class="questions-outer">
+
+    <!--Question Section Header-->
     <mat-card-header class="questions-header" >
+
       <div mat-card-avatar class="survey-icon"></div>
-      <mat-card-title>Survey #temp</mat-card-title>
+
+      <mat-card-title>Survey {{survey.survey}}</mat-card-title>
+
       <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
-      <span style="flex: 1 1 auto;"></span>
-      <button mat-raised-button color="accent" type="submit" class="submit-button"
-              title="Enter your name and answer all the questions!"
-              [disabled]="reactiveForm.invalid">
-        SUBMIT
-      </button>
+
+      <span style="flex: 1 1 auto;"></span><!--All future content moved right-->
+
+      <button mat-raised-button color="accent" type="submit" class="submit-button" [disabled]="reactiveForm.invalid"
+              title="Enter your name and answer all the questions!">SUBMIT</button>
+
     </mat-card-header>
+
+    <!--Loop and Create the Tabs-->
     <mat-card-content>
       <div formArrayName="groups">
-        <mat-tab-group [selectedIndex]="selectedTab" #tabs>
+
+        <mat-tab-group [selectedIndex]="selectedTab" #tabs (selectedTabChange)="tabChanged($event)">
           <mat-tab *ngFor="let group of survey.groups; index as groupIndex"
                    label="{{group.groupName}}" [formArrayName]=groupIndex>
+
+            <!--Loop and create each question in the Group-->
             <div class="tab-content">
               <mat-card class="question-card" *ngFor="let question of group.questions; index as questionIndex">
+
                 <mat-card-header class="question-card-header">
+
                   <div mat-card-avatar class="question-icon"></div>
+
                   <mat-card-title>{{question.question}}</mat-card-title>
+
                   <mat-card-subtitle>Question {{questionIndex + 1}} of {{group.questions.length}}</mat-card-subtitle>
+
                 </mat-card-header>
+
+                <!--Display a Question's answers-->
                 <mat-radio-group [formControlName]="questionIndex">
+
                   <mat-radio-button *ngFor="let answer of question.responses; index as answerIndex"
                                     [value]="answerIndex">
+
                     <span class="wrap-mat-radio-label">{{answer}}</span>
                   </mat-radio-button>
+
                 </mat-radio-group>
               </mat-card>
+
+              <!--Switch Tabs and lower Submit Button-->
               <div class="tab-selector-buttons">
-                <button mat-raised-button type="button" color="primary" (click)="selectTab(-1, tabs.selectedIndex)">
+                <button mat-raised-button type="button" color="primary"
+                        [disabled]="selectedTab <= 0" (click)="tabDown()">
                   Prev
                 </button>
-                <button mat-raised-button type="button" color="primary" (click)="selectTab(1, tabs.selectedIndex)">
+
+                <button mat-raised-button type="button" color="primary"
+                        [disabled]="selectedTab >= survey.groups.length - 1" (click)="tabUp()">
                   Next
                 </button>
+
                 <button mat-raised-button type="submit" color="accent" class="submit-button" [disabled]="reactiveForm.invalid">
                   SUBMIT
                 </button>
               </div>
+
             </div>
+
           </mat-tab>
+
         </mat-tab-group>
+
       </div>
+
     </mat-card-content>
+
   </div>
+
 </form>
+
+<ng-template #loading>
+  <div class="loader"></div>
+</ng-template>

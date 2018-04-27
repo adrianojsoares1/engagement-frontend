@@ -1,5 +1,7 @@
 export class SurveyResponse{
-  answers: any[][];
-  id: number;
-  team: string;
+  teamID: string;
+  adid: string;
+  surveyID: number;
+  timestamp: number;
+  responses: object;
 }
