@@ -1,4 +1,4 @@
-<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+<form *ngIf="reactiveForm; else loading" [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
 
   <!-- Ask for ADID and Team Name-->
   <div class="survey-header">
@@ -22,7 +22,7 @@
 
       <div mat-card-avatar class="survey-icon"></div>
 
-      <mat-card-title>Survey #temp</mat-card-title>
+      <mat-card-title>Survey {{survey.survey}}</mat-card-title>
 
       <mat-card-subtitle>Team: {{team}}</mat-card-subtitle>
 
@@ -75,7 +75,7 @@
                 </button>
 
                 <button mat-raised-button type="button" color="primary"
-                        [disabled]="selectedTab >= AMOUNT_OF_GROUPS - 1" (click)="tabUp()">
+                        [disabled]="selectedTab >= survey.groups.length - 1" (click)="tabUp()">
                   Next
                 </button>
 
@@ -97,3 +97,7 @@
   </div>
 
 </form>
+
+<ng-template #loading>
+  <div class="loader"></div>
+</ng-template>

@@ -1,10 +1,10 @@
 import {Component, Input, OnInit, Inject} from '@angular/core';
 import { SurveyService } from '../survey.service';
 import { Survey } from '../Survey';
-import { SURVEYS } from '../mock-surveys';
-import {FormBuilder, FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
+import {FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
 import {MatTabChangeEvent} from '@angular/material';
 import {SurveyResponse} from '../SurveyResponse';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-survey-taker',
@@ -18,24 +18,26 @@ export class SurveyTakerComponent implements OnInit{
   survey: Survey;
   selectedTab = 0;
 
-  AMOUNT_OF_GROUPS: number;
+  constructor(@Inject(SurveyService) private surveyService: SurveyService, @Inject(ActivatedRoute) private router: ActivatedRoute) {}
 
-  constructor(private surveyService: SurveyService, @Inject(FormBuilder) private fb: FormBuilder) {
-    this.survey = <Survey>SURVEYS[0];
-    this.AMOUNT_OF_GROUPS = this.survey.groups.length;
+  //ngOnInit: () -> void
+  //Implements OnInit interface, all instantiation goes here, NOT constructor
+  ngOnInit() {
+    const route = this.router.snapshot.params.id;
+
+    //set the survey
+    this.getSurvey(route);
 
     //instantiate the Form
-    this.reactiveForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      adid: new FormControl('', Validators.required),
-      groups: new FormArray(this.groups, Validators.required) //groups will be FormArray<FormArray<FormControl>>
-    });
+
+    console.log("Made it here.");
   }
+
   //getGroups: () -> FormArray[]
   //Purpose: Every Survey has an array of groups. This returns an array of FormArrays that map to each individual group.
   get groups() : FormArray[] {
     let forms: FormArray[] = [];
-    for(let i = 0; i < this.AMOUNT_OF_GROUPS; i++)
+    for(let i = 0; i < this.survey.groups.length; i++)
       forms.push(new FormArray(this.getQuestions(i), Validators.required));
 
     return forms;
@@ -63,12 +65,6 @@ export class SurveyTakerComponent implements OnInit{
   //Purpose: Set the current tab when the user clicks on a new one instead of using the Prev/Next buttons
   tabChanged = (tabChangeEvent: MatTabChangeEvent) => this.selectedTab = tabChangeEvent.index;
 
-  //ngOnInit: () -> void
-  //Implements OnInit interface
-  ngOnInit() {
-    this.getSurvey();
-  }
-
   //onSubmit: () -> void
   //Purpose: To submit the forms
   onSubmit(): void {
@@ -85,8 +81,15 @@ export class SurveyTakerComponent implements OnInit{
 
   //getSurvey: Observable<HttpResponse<Survey>> => void
   //Purpose: Use the dependency injected SurveyService to retrieve the requested survey (from URI)
-  getSurvey(): void {
-    this.surveyService.getSurvey().subscribe(survey => this.survey = survey);
+  getSurvey(id): void {
+    this.surveyService.getSurvey(id).subscribe(survey => {
+      this.survey = survey;
+      this.reactiveForm = new FormGroup({
+        name: new FormControl('', Validators.required),
+        adid: new FormControl('', Validators.required),
+        groups: new FormArray(this.groups, Validators.required) //groups will be FormArray<FormArray<FormControl>>
+      })
+    });
   }
 
 }

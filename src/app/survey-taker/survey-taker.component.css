@@ -99,3 +99,18 @@ input {
   width: 49%;
   display: inline-block;
 }
+
+.loader {
+  border: 16px solid #F3F3F3;
+  border-radius: 50%;
+  border-top: 16px solid #3F51B5;
+  width: 120px;
+  height: 120px;
+  margin: 100px auto auto auto;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
