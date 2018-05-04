@@ -79,7 +79,7 @@ export class SurveyTakerComponent implements OnInit{
     this.surveyService.postSurvey(response).subscribe(() => console.log("The survey has been posted."));
   }
 
-  //getSurvey: Observable<HttpResponse<Survey>> => void
+  //getSurvey: Observable<<Survey>> => void
   //Purpose: Use the dependency injected SurveyService to retrieve the requested survey (from URI)
   getSurvey(id): void {
     this.surveyService.getSurvey(id).subscribe(survey => {

@@ -13,13 +13,17 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { SurveyTakerComponent } from './survey-taker/survey-taker.component';
 import {SurveyService} from './survey.service';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { SurveyNotFoundComponent } from './survey-not-found/survey-not-found.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FindSurveyBoxComponent,
-    SurveyTakerComponent
+    SurveyTakerComponent,
+    NotFoundComponent,
+    SurveyNotFoundComponent
   ],
   imports: [
     BrowserModule,
