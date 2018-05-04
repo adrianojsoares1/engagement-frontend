@@ -1,0 +1,268 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "nodejs-6-rhel7-angular-ups-s2i",
+    "annotations": {
+      "openshift.io/display-name": "Angular2 S2I",
+      "description": "A Node.js application that serves up an angular2 frontend.",
+      "tags": "ups,nodejs,angular,angular2,angular4",
+      "iconClass": "icon-nodejs",
+      "template.openshift.io/long-description": "This template defines resources needed to develop a NodeJS + Angular2 application, including a build configuration and application deployment configuration.  It does not include a database.",
+      "template.openshift.io/provider-display-name": "UPS",
+      "template.openshift.io/documentation-url": "http://tfs.ups.com:8080/tfs/UpsProd/P08SGIT_EA_CDP/_git/openshift-base-templates?path=%2Fs2i-templates",
+      "template.openshift.io/support-url": "https://wss.inside.ups.com/sites/EADS/CCC/Openshift/SitePages/Home.aspx"
+    }
+  },
+  "message": "The following service(s) have been created in your project: ${MICROSERVICE_NAME}.",
+  "labels": {
+    "template": "nodejs-6-rhel7-angular-ups-s2i"
+  },
+  "objects": [
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MICROSERVICE_NAME}",
+        "labels": {
+          "microservice": "${MICROSERVICE_NAME}"
+        },
+        "annotations": {
+          "description": "Exposes and load balances the application pods"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "web",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "name": "${MICROSERVICE_NAME}"
+        }
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MICROSERVICE_NAME}",
+        "labels": {
+          "microservice": "${MICROSERVICE_NAME}"
+        },
+        "annotations": {
+          "template.openshift.io/expose-uri": "http://{.spec.host}{.spec.path}"
+        }
+      },
+      "spec": {
+        "host": "${APPLICATION_DOMAIN}",
+        "to": {
+          "kind": "Service",
+          "name": "${MICROSERVICE_NAME}"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MICROSERVICE_NAME}",
+        "labels": {
+          "microservice": "${MICROSERVICE_NAME}"
+        },
+        "annotations": {
+          "description": "Keeps track of changes in the application image"
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MICROSERVICE_NAME}",
+        "labels": {
+          "microservice": "${MICROSERVICE_NAME}"
+        },
+        "annotations": {
+          "description": "Defines how to build the application"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${SOURCE_REPOSITORY_URL}",
+            "ref": "${SOURCE_REPOSITORY_REF}"
+          },
+          "contextDir": "${CONTEXT_DIR}",
+          "sourceSecret": {
+            "name": "gitsecret"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "openshift",
+              "name": "nodejs-6-rhel7-angular-ups:latest"
+            },
+            "env": [
+              {
+                "name": "NODE_ENV",
+                "value": "development"
+              }
+            ]
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${MICROSERVICE_NAME}:latest"
+          }
+        },
+        "triggers": [
+          {
+            "type": "ImageChange"
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "postCommit": {
+          "script": "npm test"
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MICROSERVICE_NAME}",
+        "labels": {
+          "microservice": "${MICROSERVICE_NAME}"
+        },
+        "annotations": {
+          "description": "Defines how to deploy the application server"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling"
+        },
+        "triggers": [
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "${MICROSERVICE_NAME}"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "${MICROSERVICE_NAME}:latest"
+              }
+            }
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "name": "${MICROSERVICE_NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "${MICROSERVICE_NAME}",
+            "labels": {
+              "name": "${MICROSERVICE_NAME}"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "${MICROSERVICE_NAME}",
+                "image": "${MICROSERVICE_NAME}:latest",
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "readinessProbe": {
+                  "timeoutSeconds": 3,
+                  "initialDelaySeconds": 3,
+                  "httpGet": {
+                    "path": "/",
+                    "port": 8080
+                  }
+                },
+                "livenessProbe": {
+                    "timeoutSeconds": 3,
+                    "initialDelaySeconds": 30,
+                    "httpGet": {
+                        "path": "/",
+                        "port": 8080
+                    }
+                },
+                "resources": {
+                    "limits": {
+                        "memory": "${MEMORY_LIMIT}"
+                    }
+                },
+                "env": [
+                ],
+                "resources": {
+        		      "limits": {
+        			         "memory": "${MEMORY_LIMIT}"
+        		      }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "MICROSERVICE_NAME",
+      "displayName": "Name",
+      "description": "The name assigned to all of the frontend objects defined in this template.",
+      "required": true,
+      "value": "angular2-microservice"
+    },
+    {
+      "name": "MEMORY_LIMIT",
+      "displayName": "Memory Limit",
+      "description": "Maximum amount of memory the container can use.",
+      "required": true,
+      "value": "512Mi"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL",
+      "displayName": "Git Repository URL",
+      "description": "The URL of the repository with your application source code.",
+      "required": true,
+      "value": ""
+    },
+    {
+      "name": "SOURCE_REPOSITORY_REF",
+      "displayName": "Git Reference",
+      "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
+    },
+    {
+      "name": "CONTEXT_DIR",
+      "displayName": "Context Directory",
+      "description": "Set this to the relative path to your project if it is not in the root of your repository."
+    },
+    {
+      "name": "APPLICATION_DOMAIN",
+      "displayName": "Application Hostname",
+      "description": "The exposed hostname that will route to the Node.js/Angular service, if left blank a value will be defaulted.",
+      "value": ""
+    }
+  ]
+}
